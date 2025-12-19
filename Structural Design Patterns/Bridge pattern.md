@@ -266,3 +266,224 @@ Bridge Pattern composition ব্যবহার করে abstraction ও imple
 
 ---
 
+
+
+---
+
+## 🔹 1️⃣ DrawAPI Interface
+
+```java
+package com.tutorialspoint;
+
+public interface DrawAPI {
+   public void drawCircle(int radius, int x, int y);
+}
+```
+
+### Explanation
+
+This is the **Implementer Interface** in Bridge Pattern.
+এটি Bridge Pattern-এর **Implementer Interface**।
+
+This interface defines how drawing should be done.
+এই ইন্টারফেস বলে দেয় কীভাবে drawing করা হবে।
+
+Actual drawing logic is not written here.
+আসল drawing লজিক এখানে লেখা নেই।
+
+Different implementations (Red, Green) will implement this interface.
+ভিন্ন ভিন্ন implementation (Red, Green) এই ইন্টারফেস ইমপ্লিমেন্ট করবে।
+
+---
+
+## 🔹 2️⃣ RedCircle Class
+
+```java
+package com.tutorialspoint;
+
+public class RedCircle implements DrawAPI {
+   @Override
+   public void drawCircle(int radius, int x, int y) {
+      System.out.println(
+        "Drawing Circle[ color: red, radius: " + radius + ", x: " + x + ", " + y + "]"
+      );
+   }
+}
+```
+
+### Explanation
+
+This is a **Concrete Implementer** class.
+এটি একটি **Concrete Implementer** ক্লাস।
+
+It provides drawing logic for red colored circle.
+এটি লাল রঙের circle আঁকার লজিক দেয়।
+
+It implements DrawAPI interface.
+এটি DrawAPI ইন্টারফেস ইমপ্লিমেন্ট করে।
+
+---
+
+## 🔹 3️⃣ GreenCircle Class
+
+```java
+package com.tutorialspoint;
+
+public class GreenCircle implements DrawAPI {
+   @Override
+   public void drawCircle(int radius, int x, int y) {
+      System.out.println(
+        "Drawing Circle[ color: green, radius: " + radius + ", x: " + x + ", " + y + "]"
+      );
+   }
+}
+```
+
+### Explanation
+
+This is another **Concrete Implementer** class.
+এটি আরেকটি **Concrete Implementer** ক্লাস।
+
+It draws a green colored circle.
+এটি সবুজ রঙের circle আঁকে।
+
+Same interface, different implementation.
+একই ইন্টারফেস, ভিন্ন implementation।
+
+---
+
+## 🔹 4️⃣ Shape Abstract Class
+
+```java
+package com.tutorialspoint;
+
+public abstract class Shape {
+   protected DrawAPI drawAPI;
+   
+   protected Shape(DrawAPI drawAPI){
+      this.drawAPI = drawAPI;
+   }
+   public abstract void draw();	
+}
+```
+
+### Explanation
+
+This is the **Abstraction** in Bridge Pattern.
+এটি Bridge Pattern-এর **Abstraction**।
+
+It contains a reference of DrawAPI.
+এটি DrawAPI-এর একটি reference ধরে রাখে।
+
+This is **composition**, not inheritance.
+এটি inheritance নয়, composition।
+
+Shape does not know which color is used.
+Shape জানে না কোন রঙ ব্যবহার করা হচ্ছে।
+
+---
+
+## 🔹 5️⃣ Circle Class
+
+```java
+package com.tutorialspoint;
+
+public class Circle extends Shape {
+   private int x, y, radius;
+
+   public Circle(int x, int y, int radius, DrawAPI drawAPI) {
+      super(drawAPI);
+      this.x = x;  
+      this.y = y;  
+      this.radius = radius;
+   }
+
+   public void draw() {
+      drawAPI.drawCircle(radius,x,y);
+   }
+}
+```
+
+### Explanation
+
+This is a **Refined Abstraction** class.
+এটি একটি **Refined Abstraction** ক্লাস।
+
+Circle extends Shape but does not care about color.
+Circle, Shape এক্সটেন্ড করে কিন্তু রঙ নিয়ে চিন্তা করে না।
+
+Drawing responsibility is delegated to DrawAPI.
+Drawing-এর কাজ DrawAPI-কে delegate করা হয়েছে।
+
+This allows abstraction and implementation to vary independently.
+এতে abstraction ও implementation আলাদাভাবে পরিবর্তন করা যায়।
+
+---
+
+## 🔹 6️⃣ BridgePatternDemo Class
+
+```java
+package com.tutorialspoint;
+
+public class BridgePatternDemo {
+   public static void main(String[] args) {
+
+      Shape redCircle =
+         new Circle(100,100, 10, new RedCircle());
+
+      Shape greenCircle =
+         new Circle(100,100, 10, new GreenCircle());
+
+      redCircle.draw();
+      greenCircle.draw();
+   }
+}
+```
+
+### Explanation
+
+This is the **Client / Demo class**.
+এটি হলো **Client / Demo ক্লাস**।
+
+Client works only with Shape abstraction.
+Client কেবল Shape abstraction ব্যবহার করে।
+
+Concrete implementation is injected at runtime.
+Concrete implementation runtime-এ পাঠানো হয়।
+
+This clearly shows Bridge Pattern in action.
+এখানেই Bridge Pattern স্পষ্টভাবে বোঝা যায়।
+
+---
+
+## 🖨 Output
+
+```
+Drawing Circle[ color: red, radius: 10, x: 100, 100]
+Drawing Circle[ color: green, radius: 10, x: 100, 100]
+```
+
+---
+
+## 🧠 Interview Key Points (Very Important)
+
+* Bridge separates **abstraction** and **implementation**
+  Bridge abstraction ও implementation আলাদা করে
+
+* Uses **composition over inheritance**
+  inheritance নয়, composition ব্যবহার করে
+
+* Prevents class explosion
+  অপ্রয়োজনীয় subclass তৈরি হওয়া বন্ধ করে
+
+---
+
+## 🎯 One-Line Interview Answer
+
+Bridge Pattern decouples abstraction from implementation so both can vary independently.
+Bridge Pattern abstraction ও implementation আলাদা করে যাতে দুটোই স্বাধীনভাবে পরিবর্তন করা যায়।
+
+---
+
+
+
